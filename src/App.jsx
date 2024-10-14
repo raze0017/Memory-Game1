@@ -59,18 +59,18 @@ function App() {
   }
 
   // Function called when a card is clicked
+
   const played = (index) => {
     if (newset.has(index)) {
       setmaxval((prevMax) => Math.max(prevMax, score)); // Update maxVal if needed
-      setNewset(new Set()); // Reset the set for a new round
       updateScore(1); // Reset the score to 0
+      setNewset(new Set()); // Reset the set for a new round
+      console.log(newset);
     } else {
-      setNewset((prevSet) => {
-        const updatedSet = new Set(prevSet);
-        updatedSet.add(index);
-        return updatedSet;
-      }); // Add new index to set
-      updateScore(0); // Increment score
+      updateScore(0);
+      setNewset((prevSet) => new Set([...prevSet, index]));
+      console.log(newset);
+      return;
     }
   };
 
@@ -78,8 +78,10 @@ function App() {
   const keys = Object.keys(hashmap);
   const shuffledKeys = shuffleArray(keys); // Shuffle the array of keys
   const selectedKeys = shuffledKeys.slice(0, 8); // Select the first 8 shuffled keys
-  const selectedImages = selectedKeys.map((key) => hashmap[key]);
-
+  const selectedImages = selectedKeys.map((key) => ({
+    id: key, // Include the Pokémon ID
+    src: hashmap[key], // Image source
+  }));
   return (
     <div data-theme="mytheme">
       <header className="text-7xl pb-20">Memory Game</header>
